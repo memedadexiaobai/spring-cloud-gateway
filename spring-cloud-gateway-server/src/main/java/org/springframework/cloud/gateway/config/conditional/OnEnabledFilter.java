@@ -31,8 +31,7 @@ public class OnEnabledFilter extends OnEnabledComponent<GatewayFilterFactory<?>>
 					SpringCloudCircuitBreakerFilterFactory.NAME);
 		}
 		else {
-			return "filter."
-					+ NameUtils.normalizeFilterFactoryNameAsProperty(filterClass);
+			return "filter." + NameUtils.normalizeFilterFactoryNameAsProperty(filterClass);
 		}
 	}
 
@@ -50,8 +49,7 @@ public class OnEnabledFilter extends OnEnabledComponent<GatewayFilterFactory<?>>
 
 		@Override
 		public GatewayFilter apply(Object config) {
-			throw new UnsupportedOperationException(
-					"class DefaultValue is never meant to be intantiated");
+			throw new UnsupportedOperationException("class DefaultValue is never meant to be intantiated");
 		}
 
 	}

@@ -47,8 +47,7 @@ public abstract class AbstractChangeRequestUriGatewayFilterFactory<T>
 		this(clazz, RouteToRequestUrlFilter.ROUTE_TO_URL_FILTER_ORDER + 1);
 	}
 
-	protected abstract Optional<URI> determineRequestUri(ServerWebExchange exchange,
-			T config);
+	protected abstract Optional<URI> determineRequestUri(ServerWebExchange exchange, T config);
 
 	public GatewayFilter apply(T config) {
 		return new OrderedGatewayFilter((exchange, chain) -> {

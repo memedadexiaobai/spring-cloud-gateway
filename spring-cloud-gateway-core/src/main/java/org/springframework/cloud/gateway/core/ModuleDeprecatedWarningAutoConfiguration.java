@@ -24,13 +24,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 public class ModuleDeprecatedWarningAutoConfiguration {
 
-	private static final Log log = LogFactory
-			.getLog(ModuleDeprecatedWarningAutoConfiguration.class);
+	private static final Log log = LogFactory.getLog(ModuleDeprecatedWarningAutoConfiguration.class);
 
 	public ModuleDeprecatedWarningAutoConfiguration() {
 		if (log.isWarnEnabled()) {
-			log.warn(
-					"The spring-cloud-gateway-core module had been deprecated in favor of spring-cloud-gateway-server");
+			log.warn("The spring-cloud-gateway-core module had been deprecated in favor of spring-cloud-gateway-server");
 		}
 	}
 

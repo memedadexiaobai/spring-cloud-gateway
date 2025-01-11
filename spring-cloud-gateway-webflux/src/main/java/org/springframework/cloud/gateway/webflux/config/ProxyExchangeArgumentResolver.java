@@ -82,8 +82,7 @@ public class ProxyExchangeArgumentResolver implements HandlerMethodArgumentResol
 	@Override
 	public Mono<Object> resolveArgument(MethodParameter parameter,
 			BindingContext bindingContext, ServerWebExchange exchange) {
-		ProxyExchange<?> proxy = new ProxyExchange<>(rest, exchange, bindingContext,
-				type(parameter));
+		ProxyExchange<?> proxy = new ProxyExchange<>(rest, exchange, bindingContext, type(parameter));
 		proxy.headers(headers);
 		if (this.autoForwardedHeaders.size() > 0) {
 			proxy.headers(extractAutoForwardedHeaders(exchange));

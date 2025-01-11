@@ -45,8 +45,7 @@ public class SimpleUrlHandlerMappingGlobalCorsAutoConfiguration {
 
 	@PostConstruct
 	void config() {
-		simpleUrlHandlerMapping
-				.setCorsConfigurations(globalCorsProperties.getCorsConfigurations());
+		simpleUrlHandlerMapping.setCorsConfigurations(globalCorsProperties.getCorsConfigurations());
 	}
 
 }

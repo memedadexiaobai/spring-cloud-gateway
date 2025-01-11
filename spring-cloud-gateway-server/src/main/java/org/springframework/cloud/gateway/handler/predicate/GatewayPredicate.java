@@ -28,7 +28,7 @@ public interface GatewayPredicate extends Predicate<ServerWebExchange> {
 		return new AndGatewayPredicate(this, wrapIfNeeded(other));
 	}
 
-	@Override
+	@Override //取非
 	default Predicate<ServerWebExchange> negate() {
 		return new NegateGatewayPredicate(this);
 	}
@@ -43,8 +43,7 @@ public interface GatewayPredicate extends Predicate<ServerWebExchange> {
 
 		if (other instanceof GatewayPredicate) {
 			right = (GatewayPredicate) other;
-		}
-		else {
+		} else {
 			right = new GatewayPredicateWrapper(other);
 		}
 		return right;

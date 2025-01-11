@@ -32,8 +32,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(name = "spring.cloud.gateway.enabled", matchIfMissing = true)
 public class GatewayClassPathWarningAutoConfiguration {
 
-	private static final Log log = LogFactory
-			.getLog(GatewayClassPathWarningAutoConfiguration.class);
+	private static final Log log = LogFactory.getLog(GatewayClassPathWarningAutoConfiguration.class);
 
 	private static final String BORDER = "\n\n**********************************************************\n\n";
 

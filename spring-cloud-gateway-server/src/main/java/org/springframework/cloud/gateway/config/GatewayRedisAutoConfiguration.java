@@ -51,8 +51,7 @@ class GatewayRedisAutoConfiguration {
 	@SuppressWarnings("unchecked")
 	public RedisScript redisRequestRateLimiterScript() {
 		DefaultRedisScript redisScript = new DefaultRedisScript<>();
-		redisScript.setScriptSource(new ResourceScriptSource(
-				new ClassPathResource("META-INF/scripts/request_rate_limiter.lua")));
+		redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("META-INF/scripts/request_rate_limiter.lua")));
 		redisScript.setResultType(List.class);
 		return redisScript;
 	}

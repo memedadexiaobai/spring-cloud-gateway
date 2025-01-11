@@ -65,8 +65,7 @@ public class ProxyResponseAutoConfiguration implements WebFluxConfigurer {
 	@Override
 	public void configureArgumentResolvers(ArgumentResolverConfigurer configurer) {
 		WebFluxConfigurer.super.configureArgumentResolvers(configurer);
-		configurer
-				.addCustomResolver(context.getBean(ProxyExchangeArgumentResolver.class));
+		configurer.addCustomResolver(context.getBean(ProxyExchangeArgumentResolver.class));
 	}
 
 }

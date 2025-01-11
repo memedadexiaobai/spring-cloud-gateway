@@ -114,8 +114,7 @@ public class BooleanSpec extends UriSpec {
 		}
 
 		public BooleanSpec not(Function<PredicateSpec, BooleanSpec> fn) {
-			return fn
-					.apply(new NotOpSpec(this.routeBuilder, this.builder, this.operator));
+			return fn.apply(new NotOpSpec(this.routeBuilder, this.builder, this.operator));
 		}
 
 	}
@@ -129,8 +128,7 @@ public class BooleanSpec extends UriSpec {
 
 		@Override
 		public BooleanSpec asyncPredicate(AsyncPredicate<ServerWebExchange> predicate) {
-			AsyncPredicate<ServerWebExchange> negated = this.routeBuilder.getPredicate()
-					.not(predicate);
+			AsyncPredicate<ServerWebExchange> negated = this.routeBuilder.getPredicate().not(predicate);
 			return super.asyncPredicate(negated);
 		}
 

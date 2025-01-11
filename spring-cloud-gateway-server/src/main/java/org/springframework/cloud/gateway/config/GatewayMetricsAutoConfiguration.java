@@ -40,8 +40,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.DispatcherHandler;
 
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(name = GatewayProperties.PREFIX + ".enabled",
-		matchIfMissing = true)
+@ConditionalOnProperty(name = GatewayProperties.PREFIX + ".enabled", matchIfMissing = true)
 @EnableConfigurationProperties
 @AutoConfigureBefore(HttpHandlerAutoConfiguration.class)
 @AutoConfigureAfter({ GatewayAutoConfiguration.class, MetricsAutoConfiguration.class,
@@ -72,21 +71,18 @@ public class GatewayMetricsAutoConfiguration {
 	}
 
 	@Bean
-	public PropertiesTagsProvider propertiesTagsProvider(
-			GatewayMetricsProperties gatewayMetricsProperties) {
+	public PropertiesTagsProvider propertiesTagsProvider(GatewayMetricsProperties gatewayMetricsProperties) {
 		return new PropertiesTagsProvider(gatewayMetricsProperties.getTags());
 	}
 
 	@Bean
 	@ConditionalOnBean(MeterRegistry.class)
-	@ConditionalOnProperty(name = GatewayProperties.PREFIX + ".metrics.enabled",
-			matchIfMissing = true)
+	@ConditionalOnProperty(name = GatewayProperties.PREFIX + ".metrics.enabled", matchIfMissing = true)
 	// don't use @ConditionalOnEnabledGlobalFilter as the above property may
 	// encompass more than just the filter
 	public GatewayMetricsFilter gatewayMetricFilter(MeterRegistry meterRegistry,
 			List<GatewayTagsProvider> tagsProviders, GatewayProperties properties) {
-		return new GatewayMetricsFilter(meterRegistry, tagsProviders,
-				properties.getMetrics().getPrefix());
+		return new GatewayMetricsFilter(meterRegistry, tagsProviders, properties.getMetrics().getPrefix());
 	}
 
 }

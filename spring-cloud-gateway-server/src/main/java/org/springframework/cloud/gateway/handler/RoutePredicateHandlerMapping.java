@@ -67,8 +67,7 @@ public class RoutePredicateHandlerMapping extends AbstractHandlerMapping {
 		}
 		return ((this.managementPort == null
 				|| (serverPort == null && this.managementPort.equals(8080))
-				|| (this.managementPort != 0 && this.managementPort.equals(serverPort)))
-						? SAME : DIFFERENT);
+				|| (this.managementPort != 0 && this.managementPort.equals(serverPort))) ? SAME : DIFFERENT);
 	}
 
 	private static Integer getPortProperty(Environment environment, String prefix) {
@@ -89,17 +88,15 @@ public class RoutePredicateHandlerMapping extends AbstractHandlerMapping {
 				.flatMap((Function<Route, Mono<?>>) r -> {
 					exchange.getAttributes().remove(GATEWAY_PREDICATE_ROUTE_ATTR);
 					if (logger.isDebugEnabled()) {
-						logger.debug(
-								"Mapping [" + getExchangeDesc(exchange) + "] to " + r);
+						logger.debug("Mapping [" + getExchangeDesc(exchange) + "] to " + r);
 					}
-
 					exchange.getAttributes().put(GATEWAY_ROUTE_ATTR, r);
 					return Mono.just(webHandler);
-				}).switchIfEmpty(Mono.empty().then(Mono.fromRunnable(() -> {
+				})
+				.switchIfEmpty(Mono.empty().then(Mono.fromRunnable(() -> {
 					exchange.getAttributes().remove(GATEWAY_PREDICATE_ROUTE_ATTR);
 					if (logger.isTraceEnabled()) {
-						logger.trace("No RouteDefinition found for ["
-								+ getExchangeDesc(exchange) + "]");
+						logger.trace("No RouteDefinition found for [" + getExchangeDesc(exchange) + "]");
 					}
 				})));
 	}
@@ -133,12 +130,9 @@ public class RoutePredicateHandlerMapping extends AbstractHandlerMapping {
 					exchange.getAttributes().put(GATEWAY_PREDICATE_ROUTE_ATTR, r.getId());
 					return r.getPredicate().apply(exchange);
 				})
-						// instead of immediately stopping main flux due to error, log and
-						// swallow it
-						.doOnError(e -> logger.error(
-								"Error applying predicate for route: " + route.getId(),
-								e))
-						.onErrorResume(e -> Mono.empty()))
+				// instead of immediately stopping main flux due to error, log and swallow it
+				.doOnError(e -> logger.error("Error applying predicate for route: " + route.getId(), e))
+				.onErrorResume(e -> Mono.empty()))
 				// .defaultIfEmpty() put a static Route not found
 				// or .switchIfEmpty()
 				// .switchIfEmpty(Mono.<Route>empty().log("noroute"))

@@ -59,8 +59,7 @@ public interface ShortcutConfigurable {
 			// assume it's spel
 			StandardEvaluationContext context = new StandardEvaluationContext();
 			context.setBeanResolver(new BeanFactoryResolver(beanFactory));
-			Expression expression = parser.parseExpression(entryValue,
-					new TemplateParserContext());
+			Expression expression = parser.parseExpression(entryValue, new TemplateParserContext());
 			value = expression.getValue(context);
 		}
 		else {

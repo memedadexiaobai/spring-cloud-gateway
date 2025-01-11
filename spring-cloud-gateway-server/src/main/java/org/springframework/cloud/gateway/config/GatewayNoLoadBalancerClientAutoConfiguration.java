@@ -42,16 +42,14 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnMissingClass("org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration")
-@ConditionalOnMissingBean(
-		type = "org.springframework.cloud.client.loadbalancer.LoadBalancerClient")
+@ConditionalOnMissingBean(type = "org.springframework.cloud.client.loadbalancer.LoadBalancerClient")
 @EnableConfigurationProperties(LoadBalancerProperties.class)
 @AutoConfigureAfter(GatewayLoadBalancerClientAutoConfiguration.class)
 public class GatewayNoLoadBalancerClientAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(LoadBalancerClientFilter.class)
-	public NoLoadBalancerClientFilter noLoadBalancerClientFilter(
-			LoadBalancerProperties properties) {
+	public NoLoadBalancerClientFilter noLoadBalancerClientFilter(LoadBalancerProperties properties) {
 		return new NoLoadBalancerClientFilter(properties.isUse404());
 	}
 
@@ -73,13 +71,11 @@ public class GatewayNoLoadBalancerClientAutoConfiguration {
 		public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 			URI url = exchange.getAttribute(GATEWAY_REQUEST_URL_ATTR);
 			String schemePrefix = exchange.getAttribute(GATEWAY_SCHEME_PREFIX_ATTR);
-			if (url == null
-					|| (!"lb".equals(url.getScheme()) && !"lb".equals(schemePrefix))) {
+			if (url == null || (!"lb".equals(url.getScheme()) && !"lb".equals(schemePrefix))) {
 				return chain.filter(exchange);
 			}
 
-			throw NotFoundException.create(use404,
-					"Unable to find instance for " + url.getHost());
+			throw NotFoundException.create(use404, "Unable to find instance for " + url.getHost());
 		}
 
 	}

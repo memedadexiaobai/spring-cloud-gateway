@@ -175,10 +175,8 @@ import static org.springframework.cloud.gateway.config.HttpClientProperties.Pool
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(name = "spring.cloud.gateway.enabled", matchIfMissing = true)
 @EnableConfigurationProperties
-@AutoConfigureBefore({ HttpHandlerAutoConfiguration.class,
-		WebFluxAutoConfiguration.class })
-@AutoConfigureAfter({ GatewayLoadBalancerClientAutoConfiguration.class,
-		GatewayClassPathWarningAutoConfiguration.class })
+@AutoConfigureBefore({ HttpHandlerAutoConfiguration.class, WebFluxAutoConfiguration.class })
+@AutoConfigureAfter({ GatewayLoadBalancerClientAutoConfiguration.class, GatewayClassPathWarningAutoConfiguration.class })
 @ConditionalOnClass(DispatcherHandler.class)
 public class GatewayAutoConfiguration {
 
@@ -188,30 +186,40 @@ public class GatewayAutoConfiguration {
 	}
 
 	@Bean
-	public RouteLocatorBuilder routeLocatorBuilder(
-			ConfigurableApplicationContext context) {
+	public RouteLocatorBuilder routeLocatorBuilder(ConfigurableApplicationContext context) {
 		return new RouteLocatorBuilder(context);
 	}
 
+	/**
+	 * 这个途径相当于从配置文件中加载 RouteDefinition
+	 * @param properties
+	 * @return
+	 */
 	@Bean
 	@ConditionalOnMissingBean
-	public PropertiesRouteDefinitionLocator propertiesRouteDefinitionLocator(
-			GatewayProperties properties) {
+	public PropertiesRouteDefinitionLocator propertiesRouteDefinitionLocator(GatewayProperties properties) {
 		return new PropertiesRouteDefinitionLocator(properties);
 	}
 
+	/**
+	 * RouteDefinition的存储，放内存
+	 * @return
+	 */
 	@Bean
 	@ConditionalOnMissingBean(RouteDefinitionRepository.class)
 	public InMemoryRouteDefinitionRepository inMemoryRouteDefinitionRepository() {
 		return new InMemoryRouteDefinitionRepository();
 	}
 
+	/**
+	 * 这个相当于获取spring扫描的RouteDefinitionLocator统一处理，获取 RouteDefinition
+	 * @param routeDefinitionLocators
+	 * @return
+	 */
 	@Bean
 	@Primary
-	public RouteDefinitionLocator routeDefinitionLocator(
-			List<RouteDefinitionLocator> routeDefinitionLocators) {
-		return new CompositeRouteDefinitionLocator(
-				Flux.fromIterable(routeDefinitionLocators));
+	public RouteDefinitionLocator routeDefinitionLocator(List<RouteDefinitionLocator> routeDefinitionLocators) {
+		return new CompositeRouteDefinitionLocator(Flux.fromIterable(routeDefinitionLocators));
 	}
 
 	@Bean
@@ -236,15 +244,12 @@ public class GatewayAutoConfiguration {
 	@ConditionalOnMissingBean(name = "cachedCompositeRouteLocator")
 	// TODO: property to disable composite?
 	public RouteLocator cachedCompositeRouteLocator(List<RouteLocator> routeLocators) {
-		return new CachingRouteLocator(
-				new CompositeRouteLocator(Flux.fromIterable(routeLocators)));
+		return new CachingRouteLocator(new CompositeRouteLocator(Flux.fromIterable(routeLocators)));
 	}
 
 	@Bean
-	@ConditionalOnClass(
-			name = "org.springframework.cloud.client.discovery.event.HeartbeatMonitor")
-	public RouteRefreshListener routeRefreshListener(
-			ApplicationEventPublisher publisher) {
+	@ConditionalOnClass(name = "org.springframework.cloud.client.discovery.event.HeartbeatMonitor")
+	public RouteRefreshListener routeRefreshListener(ApplicationEventPublisher publisher) {
 		return new RouteRefreshListener(publisher);
 	}
 
@@ -262,8 +267,7 @@ public class GatewayAutoConfiguration {
 	public RoutePredicateHandlerMapping routePredicateHandlerMapping(
 			FilteringWebHandler webHandler, RouteLocator routeLocator,
 			GlobalCorsProperties globalCorsProperties, Environment environment) {
-		return new RoutePredicateHandlerMapping(webHandler, routeLocator,
-				globalCorsProperties, environment);
+		return new RoutePredicateHandlerMapping(webHandler, routeLocator, globalCorsProperties, environment);
 	}
 
 	@Bean
@@ -279,8 +283,7 @@ public class GatewayAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "spring.cloud.gateway.forwarded.enabled",
-			matchIfMissing = true)
+	@ConditionalOnProperty(name = "spring.cloud.gateway.forwarded.enabled", matchIfMissing = true)
 	public ForwardedHeadersFilter forwardedHeadersFilter() {
 		return new ForwardedHeadersFilter();
 	}
@@ -293,8 +296,7 @@ public class GatewayAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "spring.cloud.gateway.x-forwarded.enabled",
-			matchIfMissing = true)
+	@ConditionalOnProperty(name = "spring.cloud.gateway.x-forwarded.enabled", matchIfMissing = true)
 	public XForwardedHeadersFilter xForwardedHeadersFilter() {
 		return new XForwardedHeadersFilter();
 	}
@@ -326,8 +328,7 @@ public class GatewayAutoConfiguration {
 
 	@Bean
 	@ConditionalOnEnabledGlobalFilter
-	public ForwardRoutingFilter forwardRoutingFilter(
-			ObjectProvider<DispatcherHandler> dispatcherHandler) {
+	public ForwardRoutingFilter forwardRoutingFilter(ObjectProvider<DispatcherHandler> dispatcherHandler) {
 		return new ForwardRoutingFilter(dispatcherHandler);
 	}
 
@@ -338,23 +339,19 @@ public class GatewayAutoConfiguration {
 	}
 
 	@Bean
-	public WebSocketService webSocketService(
-			RequestUpgradeStrategy requestUpgradeStrategy) {
+	public WebSocketService webSocketService(RequestUpgradeStrategy requestUpgradeStrategy) {
 		return new HandshakeWebSocketService(requestUpgradeStrategy);
 	}
 
 	@Bean
 	@ConditionalOnEnabledGlobalFilter
-	public WebsocketRoutingFilter websocketRoutingFilter(WebSocketClient webSocketClient,
-			WebSocketService webSocketService,
+	public WebsocketRoutingFilter websocketRoutingFilter(WebSocketClient webSocketClient, WebSocketService webSocketService,
 			ObjectProvider<List<HttpHeadersFilter>> headersFilters) {
-		return new WebsocketRoutingFilter(webSocketClient, webSocketService,
-				headersFilters);
+		return new WebsocketRoutingFilter(webSocketClient, webSocketService, headersFilters);
 	}
 
 	@Bean
-	public WeightCalculatorWebFilter weightCalculatorWebFilter(
-			ConfigurationService configurationService,
+	public WeightCalculatorWebFilter weightCalculatorWebFilter(ConfigurationService configurationService,
 			ObjectProvider<RouteLocator> routeLocator) {
 		return new WeightCalculatorWebFilter(routeLocator, configurationService);
 	}
@@ -426,8 +423,7 @@ public class GatewayAutoConfiguration {
 
 	@Bean
 	@ConditionalOnEnabledPredicate
-	public ReadBodyRoutePredicateFactory readBodyRoutePredicateFactory(
-			ServerCodecConfigurer codecConfigurer) {
+	public ReadBodyRoutePredicateFactory readBodyRoutePredicateFactory(ServerCodecConfigurer codecConfigurer) {
 		return new ReadBodyRoutePredicateFactory(codecConfigurer.getReaders());
 	}
 
@@ -478,8 +474,7 @@ public class GatewayAutoConfiguration {
 
 	@Bean
 	@ConditionalOnEnabledFilter
-	public ModifyRequestBodyGatewayFilterFactory modifyRequestBodyGatewayFilterFactory(
-			ServerCodecConfigurer codecConfigurer) {
+	public ModifyRequestBodyGatewayFilterFactory modifyRequestBodyGatewayFilterFactory(ServerCodecConfigurer codecConfigurer) {
 		return new ModifyRequestBodyGatewayFilterFactory(codecConfigurer.getReaders());
 	}
 
