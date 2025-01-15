@@ -63,8 +63,7 @@ public class AddRequestParameterGatewayFilterFactory
 					URI newUri = UriComponentsBuilder.fromUri(uri)
 							.replaceQuery(query.toString()).build(true).toUri();
 
-					ServerHttpRequest request = exchange.getRequest().mutate().uri(newUri)
-							.build();
+					ServerHttpRequest request = exchange.getRequest().mutate().uri(newUri).build();
 
 					return chain.filter(exchange.mutate().request(request).build());
 				}

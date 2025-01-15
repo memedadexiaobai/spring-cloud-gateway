@@ -73,8 +73,7 @@ public class RouteToRequestUrlFilter implements GlobalFilter, Ordered {
 		if (hasAnotherScheme(routeUri)) {
 			// this is a special url, save scheme to special attribute
 			// replace routeUri with schemeSpecificPart
-			exchange.getAttributes().put(GATEWAY_SCHEME_PREFIX_ATTR,
-					routeUri.getScheme());
+			exchange.getAttributes().put(GATEWAY_SCHEME_PREFIX_ATTR, routeUri.getScheme());
 			routeUri = URI.create(routeUri.getSchemeSpecificPart());
 		}
 

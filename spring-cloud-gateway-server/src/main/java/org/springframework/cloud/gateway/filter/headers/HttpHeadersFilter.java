@@ -23,8 +23,7 @@ import org.springframework.web.server.ServerWebExchange;
 
 public interface HttpHeadersFilter {
 
-	static HttpHeaders filterRequest(List<HttpHeadersFilter> filters,
-			ServerWebExchange exchange) {
+	static HttpHeaders filterRequest(List<HttpHeadersFilter> filters, ServerWebExchange exchange) {
 		HttpHeaders headers = exchange.getRequest().getHeaders();
 		return filter(filters, headers, exchange, Type.REQUEST);
 	}

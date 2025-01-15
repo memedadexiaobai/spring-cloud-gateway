@@ -75,8 +75,7 @@ public class ReactiveLoadBalancerClientFilter implements GlobalFilter, Ordered {
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 		URI url = exchange.getAttribute(GATEWAY_REQUEST_URL_ATTR);
 		String schemePrefix = exchange.getAttribute(GATEWAY_SCHEME_PREFIX_ATTR);
-		if (url == null
-				|| (!"lb".equals(url.getScheme()) && !"lb".equals(schemePrefix))) {
+		if (url == null || (!"lb".equals(url.getScheme()) && !"lb".equals(schemePrefix))) {
 			return chain.filter(exchange);
 		}
 		// preserve the original url

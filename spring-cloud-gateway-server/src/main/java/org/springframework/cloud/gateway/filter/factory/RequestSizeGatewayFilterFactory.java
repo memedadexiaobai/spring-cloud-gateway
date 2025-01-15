@@ -75,12 +75,10 @@ public class RequestSizeGatewayFilterFactory extends
 				if (!StringUtils.isEmpty(contentLength)) {
 					Long currentRequestSize = Long.valueOf(contentLength);
 					if (currentRequestSize > requestSizeConfig.getMaxSize().toBytes()) {
-						exchange.getResponse()
-								.setStatusCode(HttpStatus.PAYLOAD_TOO_LARGE);
+						exchange.getResponse().setStatusCode(HttpStatus.PAYLOAD_TOO_LARGE);
 						if (!exchange.getResponse().isCommitted()) {
 							exchange.getResponse().getHeaders().add("errorMessage",
-									getErrorMessage(currentRequestSize,
-											requestSizeConfig.getMaxSize().toBytes()));
+									getErrorMessage(currentRequestSize, requestSizeConfig.getMaxSize().toBytes()));
 						}
 						return exchange.getResponse().setComplete();
 					}

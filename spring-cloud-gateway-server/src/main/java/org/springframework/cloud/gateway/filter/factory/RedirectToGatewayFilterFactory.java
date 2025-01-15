@@ -79,8 +79,7 @@ public class RedirectToGatewayFilterFactory
 	public GatewayFilter apply(HttpStatusHolder httpStatus, URI uri) {
 		return new GatewayFilter() {
 			@Override
-			public Mono<Void> filter(ServerWebExchange exchange,
-					GatewayFilterChain chain) {
+			public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 				if (!exchange.getResponse().isCommitted()) {
 					setResponseStatus(exchange, httpStatus);
 

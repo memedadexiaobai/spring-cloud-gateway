@@ -254,14 +254,12 @@ public class RetryGatewayFilterFactory
 			if (retry != null) {
 				// retryWhen returns a Mono<Void>
 				// retry needs to go before repeat
-				publisher = ((Mono<Void>) publisher)
-						.retryWhen(retry.withApplicationContext(exchange));
+				publisher = ((Mono<Void>) publisher).retryWhen(retry.withApplicationContext(exchange));
 			}
 			if (repeat != null) {
 				// repeatWhen returns a Flux<Void>
 				// so this needs to be last and the variable a Publisher<Void>
-				publisher = ((Mono<Void>) publisher)
-						.repeatWhen(repeat.withApplicationContext(exchange));
+				publisher = ((Mono<Void>) publisher).repeatWhen(repeat.withApplicationContext(exchange));
 			}
 
 			return Mono.fromDirect(publisher);

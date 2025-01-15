@@ -97,8 +97,7 @@ public class RouteDefinitionRouteLocator
 		this.routeDefinitionLocator = routeDefinitionLocator;
 		this.configurationService = configurationService;
 		initFactories(predicates);
-		gatewayFilterFactories.forEach(
-				factory -> this.gatewayFilterFactories.put(factory.name(), factory));
+		gatewayFilterFactories.forEach(factory -> this.gatewayFilterFactories.put(factory.name(), factory));
 		this.gatewayProperties = gatewayProperties;
 	}
 

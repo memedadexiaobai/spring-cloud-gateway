@@ -108,8 +108,7 @@ public class NettyRoutingFilter implements GlobalFilter, Ordered {
 		URI requestUrl = exchange.getRequiredAttribute(GATEWAY_REQUEST_URL_ATTR);
 
 		String scheme = requestUrl.getScheme();
-		if (isAlreadyRouted(exchange) || (!"http".equalsIgnoreCase(scheme)
-				&& !"https".equalsIgnoreCase(scheme))) {
+		if (isAlreadyRouted(exchange) || (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme))) {
 			return chain.filter(exchange);
 		}
 		setAlreadyRouted(exchange);
@@ -124,8 +123,7 @@ public class NettyRoutingFilter implements GlobalFilter, Ordered {
 		final DefaultHttpHeaders httpHeaders = new DefaultHttpHeaders();
 		filtered.forEach(httpHeaders::set);
 
-		boolean preserveHost = exchange
-				.getAttributeOrDefault(PRESERVE_HOST_HEADER_ATTRIBUTE, false);
+		boolean preserveHost = exchange.getAttributeOrDefault(PRESERVE_HOST_HEADER_ATTRIBUTE, false);
 		Route route = exchange.getAttribute(GATEWAY_ROUTE_ATTR);
 
 		Flux<HttpClientResponse> responseFlux = getHttpClient(route, exchange)
@@ -139,8 +137,7 @@ public class NettyRoutingFilter implements GlobalFilter, Ordered {
 					}
 				}).request(method).uri(url).send((req, nettyOutbound) -> {
 					if (log.isTraceEnabled()) {
-						nettyOutbound
-								.withConnection(connection -> log.trace("outbound route: "
+						nettyOutbound.withConnection(connection -> log.trace("outbound route: "
 										+ connection.channel().id().asShortText()
 										+ ", inbound: " + exchange.getLogPrefix()));
 					}
@@ -157,8 +154,7 @@ public class NettyRoutingFilter implements GlobalFilter, Ordered {
 					// put headers and status so filters can modify the response
 					HttpHeaders headers = new HttpHeaders();
 
-					res.responseHeaders().forEach(
-							entry -> headers.add(entry.getKey(), entry.getValue()));
+					res.responseHeaders().forEach(entry -> headers.add(entry.getKey(), entry.getValue()));
 
 					String contentTypeValue = headers.getFirst(HttpHeaders.CONTENT_TYPE);
 					if (StringUtils.hasLength(contentTypeValue)) {

@@ -92,11 +92,9 @@ public class RequestRateLimiterGatewayFilterFactory extends
 	@Override
 	public GatewayFilter apply(Config config) {
 		KeyResolver resolver = getOrDefault(config.keyResolver, defaultKeyResolver);
-		RateLimiter<Object> limiter = getOrDefault(config.rateLimiter,
-				defaultRateLimiter);
+		RateLimiter<Object> limiter = getOrDefault(config.rateLimiter, defaultRateLimiter);
 		boolean denyEmpty = getOrDefault(config.denyEmptyKey, this.denyEmptyKey);
-		HttpStatusHolder emptyKeyStatus = HttpStatusHolder
-				.parse(getOrDefault(config.emptyKeyStatus, this.emptyKeyStatusCode));
+		HttpStatusHolder emptyKeyStatus = HttpStatusHolder.parse(getOrDefault(config.emptyKeyStatus, this.emptyKeyStatusCode));
 
 		return (exchange, chain) -> resolver.resolve(exchange).defaultIfEmpty(EMPTY_KEY)
 				.flatMap(key -> {
@@ -109,16 +107,14 @@ public class RequestRateLimiterGatewayFilterFactory extends
 					}
 					String routeId = config.getRouteId();
 					if (routeId == null) {
-						Route route = exchange
-								.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
+						Route route = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR);
 						routeId = route.getId();
 					}
 					return limiter.isAllowed(routeId, key).flatMap(response -> {
 
 						for (Map.Entry<String, String> header : response.getHeaders()
 								.entrySet()) {
-							exchange.getResponse().getHeaders().add(header.getKey(),
-									header.getValue());
+							exchange.getResponse().getHeaders().add(header.getKey(), header.getValue());
 						}
 
 						if (response.isAllowed()) {

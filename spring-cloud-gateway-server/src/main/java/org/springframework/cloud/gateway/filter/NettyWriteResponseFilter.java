@@ -96,8 +96,7 @@ public class NettyWriteResponseFilter implements GlobalFilter, Ordered {
 							log.trace("invalid media type", e);
 						}
 					}
-					return (isStreamingMediaType(contentType)
-							? response.writeAndFlushWith(body.map(Flux::just))
+					return (isStreamingMediaType(contentType) ? response.writeAndFlushWith(body.map(Flux::just))
 							: response.writeWith(body));
 				})).doOnCancel(() -> cleanup(exchange));
 		// @formatter:on
