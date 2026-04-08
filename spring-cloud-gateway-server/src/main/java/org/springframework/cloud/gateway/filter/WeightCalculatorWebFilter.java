@@ -246,8 +246,7 @@ public class WeightCalculatorWebFilter
 			List<Double> ranges = config.ranges;
 
 			if (log.isTraceEnabled()) {
-				log.trace("Weight for group: " + group + ", ranges: " + ranges + ", r: "
-						+ r);
+				log.trace("Weight for group: " + group + ", ranges: " + ranges + ", r: " + r);
 			}
 
 			for (int i = 0; i < ranges.size() - 1; i++) {
